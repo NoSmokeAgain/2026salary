@@ -338,14 +338,14 @@ let best=null;try{best=JSON.parse(localStorage.getItem('pd_best')||'null')}catch
 function setup(){
   let who='single';try{who=localStorage.getItem('pd_who')||'single'}catch(e){}
   app.innerHTML=`<div class="hero"><h1>你的薪水，<br>撐得到<em>月底</em>嗎？</h1>
-    <p>${GAME_MONTH} 月的帳單已經在路上了。15 題、1 分鐘：手搖、喜帖、${(SEASON[GAME_MONTH]||[])[0]?.[1]||'颱風假'}、分期付款⋯<br>看你是存到能出國，還是 20 號就開始吃土。</p></div>
-    <p class="lbl">你現在是？</p>
+    <p>15 題，看你是存到出國，還是 20 號就吃土。</p></div>
+    <p class="lbl">你是</p>
     <div class="who" id="who">${Object.entries(WHO).map(([k,[l,e]])=>`<button data-w="${k}" aria-pressed="${k===who}">${e} ${l}</button>`).join('')}</div>
-    <p class="lbl">先誠實說，你月薪多少？（沒人會知道🤫）</p>
-    <div class="sal">${SAL.map(([s,l,f],i)=>{const fx=f.reduce((a,b)=>a+b[1],0);return`<button data-i="${i}"><b>${kName(s)}</b><span>${l}・${prText(s)}</span><span>固定支出 ${Math.round(fx/1000)}K</span></button>`}).join('')}</div>
-    <p class="lbl">🔒 隱藏級距（答對一題才能解鎖）</p>
-    <div class="sal hid">${HIDDEN.map(([v,l],i)=>{const open=unlocked.includes(v);return`<button data-h="${i}" class="${open?'gold':'lock'}"><b>${open?kName(v):'??萬'}</b><span>${open?l+'・金字塔頂端':'點我挑戰'}</span><span>${open?'已解鎖':'🔒'}</span></button>`}).join('')}</div>
-    <p class="fixed">「贏過幾 % 上班族」依主計總處 113 年受僱員工全年總薪資分布，年薪以月薪 × 13.5 估算。<br>賺越多，花越多：月薪越高，房貸、車貸、孝親費和生活開銷也越高。</p>
+    <p class="lbl">月薪多少？（沒人會知道🤫）</p>
+    <div class="sal">${SAL.map(([s,l,f],i)=>{const fx=f.reduce((a,b)=>a+b[1],0);return`<button data-i="${i}"><b>${kName(s)}</b><span>${prText(s)}</span></button>`}).join('')}</div>
+    <p class="lbl">🔒 隱藏級距・答對才能玩</p>
+    <div class="sal hid">${HIDDEN.map(([v,l],i)=>{const open=unlocked.includes(v);return`<button data-h="${i}" class="${open?'gold':'lock'}"><b>${open?kName(v):'??萬'}</b><span>${open?l:'點我挑戰'}</span></button>`}).join('')}</div>
+    <p class="fixed">百分比依主計總處 113 年薪資分布估算</p>
     ${best?`<p class="fixed">你的最佳紀錄：${best.title}・剩 ${fmt(best.money)}</p>`:''}`;
   app.querySelectorAll('#who button').forEach(b=>b.onclick=()=>{who=b.dataset.w;try{localStorage.setItem('pd_who',who)}catch(e){}initAudio();sfx.flip();app.querySelectorAll('#who button').forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'))});
   app.querySelectorAll('.sal button[data-i]').forEach(b=>b.onclick=()=>{initAudio();bgmStart();start(+b.dataset.i,who)});
